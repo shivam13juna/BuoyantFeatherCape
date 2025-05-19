@@ -1,0 +1,86 @@
+name: Build and Release FeatherCapeJump
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build:
+    name: Build .NET Project
+    runs-on: windows-latest # Using windows-latest as it's a .NET Framework project
+    permissions:
+      contents: read # To checkout the code
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          # Using .NET SDK 7.x which supports .NET Framework 4.7.2
+          dotnet-version: '7.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore FeatherCapeJump.sln
+        working-directory: '${{ github.workspace }}'
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          $TAG = "${{ github.ref_name }}"
+          if ($TAG.StartsWith("v")) {
+            $VERSION = $TAG.Substring(1)
+          } else {
+            $VERSION = $TAG
+          }
+          Write-Host "Detected version: $VERSION"
+          echo "version=$VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        shell: powershell
+
+      - name: Build project
+        run: >
+          dotnet build FeatherCapeJump.sln --configuration Release --no-restore
+          /p:Version=${{ steps.get_version.outputs.version }}
+          /p:AssemblyVersion=${{ steps.get_version.outputs.version }}
+          /p:FileVersion=${{ steps.get_version.outputs.version }}
+        working-directory: '${{ github.workspace }}'
+        shell: powershell
+
+      - name: Upload DLL artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FeatherCapeJump-dll
+          # Path to the DLL. Based on your structure, it's under net472 for Release.
+          path: '${{ github.workspace }}/bin/Release/net472/FeatherCapeJump.dll'
+
+  create_release:
+    name: Create GitHub Release
+    needs: build # This job runs after the build job successfully completes
+    runs-on: ubuntu-latest # Release creation can run on ubuntu
+    permissions:
+      contents: write # Required to create releases and upload assets
+
+    steps:
+      - name: Download DLL artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: FeatherCapeJump-dll
+          path: artifacts # Download to 'artifacts' directory in the runner
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            Automated release for ${{ github.ref_name }}.
+            The `FeatherCapeJump.dll` is attached below.
+
+            **Changelog:**
+            *(Consider maintaining a CHANGELOG.md file and linking it here, or list changes manually for each release)*
+          draft: false # Set to true if you want to manually publish the release later
+          prerelease: false # Set to true if this tag represents a pre-release
+          files: |
+            artifacts/FeatherCapeJump.dll
