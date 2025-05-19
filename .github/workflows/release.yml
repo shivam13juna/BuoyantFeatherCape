@@ -51,25 +51,37 @@ jobs:
           if ("${{ github.ref_type }}" -eq "tag") {
             $REF_NAME = "${{ github.ref_name }}"
             if ($REF_NAME.StartsWith("v")) {
-              $VERSION = $REF_NAME.Substring(1)
+              $VERSION_STRING = $REF_NAME.Substring(1) # e.g., 1.0.0
             } else {
-              $VERSION = $REF_NAME
+              $VERSION_STRING = $REF_NAME # e.g., 1.0.0
             }
+            $INFORMATIONAL_VERSION = $VERSION_STRING
+            # For tags, ensure AssemblyVersion has at least major.minor.build.revision, pad with .0 if needed
+            $VERSION_PARTS = $VERSION_STRING.Split('.')
+            # Ensure we have at least major and minor. Pad build and revision if not present.
+            if($VERSION_PARTS.Length -eq 1) { $VERSION_PARTS += "0"; $VERSION_PARTS += "0"; $VERSION_PARTS += "0" } # e.g. 1 -> 1.0.0.0
+            elseif($VERSION_PARTS.Length -eq 2) { $VERSION_PARTS += "0"; $VERSION_PARTS += "0" } # e.g. 1.0 -> 1.0.0.0
+            elseif($VERSION_PARTS.Length -eq 3) { $VERSION_PARTS += "0" } # e.g. 1.0.0 -> 1.0.0.0
+            # If more than 4 parts, truncate to 4 for AssemblyVersion
+            $ASSEMBLY_FILE_VERSION = ($VERSION_PARTS | Select-Object -First 4) -join '.'
           } else {
             # For non-tag pushes (e.g., to master)
             $SHORT_SHA = "${{ github.sha }}".Substring(0, 7)
-            $VERSION = "0.0.0-dev-$SHORT_SHA"
+            $INFORMATIONAL_VERSION = "0.0.0-dev-$SHORT_SHA"
+            $ASSEMBLY_FILE_VERSION = "0.0.0.0" # Strict x.x.x.x format for AssemblyVersion/FileVersion
           }
-          Write-Host "Detected version: $VERSION"
-          echo "version=$VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Detected InformationalVersion: $INFORMATIONAL_VERSION"
+          Write-Host "Detected AssemblyFileVersion: $ASSEMBLY_FILE_VERSION"
+          echo "informational_version=$INFORMATIONAL_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          echo "assembly_file_version=$ASSEMBLY_FILE_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
         shell: powershell
 
       - name: Build project
         run: >
           dotnet build FeatherCapeJump.sln --configuration Release --no-restore
-          /p:Version=${{ steps.get_version.outputs.version }}
-          /p:AssemblyVersion=${{ steps.get_version.outputs.version }}
-          /p:FileVersion=${{ steps.get_version.outputs.version }}
+          /p:Version=${{ steps.get_version.outputs.informational_version }}
+          /p:AssemblyVersion=${{ steps.get_version.outputs.assembly_file_version }}
+          /p:FileVersion=${{ steps.get_version.outputs.assembly_file_version }}
         working-directory: '${{ github.workspace }}'
         shell: powershell
 
