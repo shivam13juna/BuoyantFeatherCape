@@ -98,8 +98,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    # Only create a release if it's a tag push
-    if: github.ref_type == 'tag'
     steps:
       - name: Download DLL artifact
         uses: actions/download-artifact@v4
@@ -110,15 +108,20 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          # For master pushes, create a unique tag like dev-<sha>
+          # For actual git tags (e.g., v1.0.0), use the git tag name.
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('dev-{0}', github.sha) }}
+          name: ${{ github.ref_type == 'tag' && format('Release {0}', github.ref_name) || format('Development Build {0}', github.sha) }}
           body: |
-            Automated release for ${{ github.ref_name }}.
+            Automated release.
+            ${{ github.ref_type == 'branch' && format('Commit: {0}', github.sha) || '' }}
             The `FeatherCapeJump.dll` is attached below.
 
             **Changelog:**
-            *(Consider maintaining a CHANGELOG.md file and linking it here, or list changes manually for each release)*
+            *(For tagged releases, consider maintaining a CHANGELOG.md file and linking it here, or list changes manually.)*
           draft: false
-          prerelease: false
+          # Mark releases from master as pre-releases
+          # Mark tagged releases as pre-releases if the tag contains a hyphen (e.g., v1.0.0-beta)
+          prerelease: ${{ github.ref_type == 'branch' || contains(github.ref_name, '-') }}
           files: |
             artifacts/FeatherCapeJump.dll
