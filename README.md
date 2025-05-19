@@ -6,7 +6,6 @@
 
 This mod enhances the vanilla Feather Cape, transforming it into a tool of true aerial agility. Leap higher and explore the world like never before!
 
-Current Version: `1.1.2`
 
 ---
 
