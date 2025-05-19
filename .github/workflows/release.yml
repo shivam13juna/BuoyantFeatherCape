@@ -3,7 +3,9 @@ name: Build and Release FeatherCapeJump
 on:
   push:
     branches:
-      - master 
+      - master # Triggers on pushes to the master branch
+    # tags:
+    #  - 'v*' # Temporarily disabled, will be re-enabled later
 
 jobs:
   build:
@@ -22,18 +24,41 @@ jobs:
           # Using .NET SDK 7.x which supports .NET Framework 4.7.2
           dotnet-version: '7.0.x'
 
+      - name: Prepare Build Libraries from _GameOriginalLibs
+        shell: powershell
+        run: |
+          $sourceDir = "${{ github.workspace }}/_GameOriginalLibs"
+          $destinationDir = "${{ github.workspace }}/BuildReferencedLibs"
+          Write-Host "Source for DLLs: $sourceDir"
+          Write-Host "Destination for build DLLs: $destinationDir"
+          if (Test-Path $sourceDir) {
+            New-Item -ItemType Directory -Force -Path $destinationDir
+            Copy-Item -Path "$sourceDir/*" -Destination $destinationDir -Force -Recurse
+            Write-Host "Copied DLLs from $sourceDir to $destinationDir"
+          } else {
+            Write-Error "_GameOriginalLibs folder not found. Please create it in your repository and commit the necessary game/modding DLLs there."
+            exit 1
+          }
+        working-directory: '${{ github.workspace }}'
+
       - name: Restore dependencies
         run: dotnet restore FeatherCapeJump.sln
         working-directory: '${{ github.workspace }}'
 
-      - name: Get version from tag
+      - name: Get version
         id: get_version
         run: |
-          $TAG = "${{ github.ref_name }}"
-          if ($TAG.StartsWith("v")) {
-            $VERSION = $TAG.Substring(1)
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $REF_NAME = "${{ github.ref_name }}"
+            if ($REF_NAME.StartsWith("v")) {
+              $VERSION = $REF_NAME.Substring(1)
+            } else {
+              $VERSION = $REF_NAME
+            }
           } else {
-            $VERSION = $TAG
+            # For non-tag pushes (e.g., to master)
+            $SHORT_SHA = "${{ github.sha }}".Substring(0, 7)
+            $VERSION = "0.0.0-dev-$SHORT_SHA"
           }
           Write-Host "Detected version: $VERSION"
           echo "version=$VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
@@ -57,17 +82,18 @@ jobs:
 
   create_release:
     name: Create GitHub Release
-    needs: build # This job runs after the build job successfully completes
-    runs-on: ubuntu-latest # Release creation can run on ubuntu
+    needs: build
+    runs-on: ubuntu-latest
     permissions:
-      contents: write # Required to create releases and upload assets
-
+      contents: write
+    # Only create a release if it's a tag push
+    if: github.ref_type == 'tag'
     steps:
       - name: Download DLL artifact
         uses: actions/download-artifact@v4
         with:
           name: FeatherCapeJump-dll
-          path: artifacts # Download to 'artifacts' directory in the runner
+          path: artifacts
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -80,7 +106,7 @@ jobs:
 
             **Changelog:**
             *(Consider maintaining a CHANGELOG.md file and linking it here, or list changes manually for each release)*
-          draft: false # Set to true if you want to manually publish the release later
-          prerelease: false # Set to true if this tag represents a pre-release
+          draft: false
+          prerelease: false
           files: |
             artifacts/FeatherCapeJump.dll
