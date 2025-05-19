@@ -68,9 +68,9 @@ jobs:
       - name: Build project
         run: |
           dotnet build FeatherCapeJump.sln --configuration Release --no-restore \
-            /p:Version=${{ needs.extract_version.outputs.informational_version }} \
-            /p:AssemblyVersion=${{ needs.extract_version.outputs.assembly_file_version }} \
-            /p:FileVersion=${{ needs.extract_version.outputs.assembly_file_version }}
+            -p:Version=${{ needs.extract_version.outputs.informational_version }} \
+            -p:AssemblyVersion=${{ needs.extract_version.outputs.assembly_file_version }} \
+            -p:FileVersion=${{ needs.extract_version.outputs.assembly_file_version }}
         shell: bash
 
       - name: Upload DLL artifact
