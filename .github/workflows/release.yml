@@ -13,6 +13,9 @@ jobs:
     runs-on: windows-latest # Using windows-latest as it's a .NET Framework project
     permissions:
       contents: read # To checkout the code
+    outputs: # Define outputs for the build job
+      informational_version: ${{ steps.get_version.outputs.informational_version }}
+      release_tag: ${{ steps.get_version.outputs.release_tag }}
 
     steps:
       - name: Checkout repository
@@ -47,34 +50,48 @@ jobs:
 
       - name: Get version
         id: get_version
+        shell: powershell
         run: |
-          if ("${{ github.ref_type }}" -eq "tag") {
-            $REF_NAME = "${{ github.ref_name }}"
-            if ($REF_NAME.StartsWith("v")) {
-              $VERSION_STRING = $REF_NAME.Substring(1) # e.g., 1.0.0
-            } else {
-              $VERSION_STRING = $REF_NAME # e.g., 1.0.0
-            }
-            $INFORMATIONAL_VERSION = $VERSION_STRING
-            # For tags, ensure AssemblyVersion has at least major.minor.build.revision, pad with .0 if needed
-            $VERSION_PARTS = $VERSION_STRING.Split('.')
-            # Ensure we have at least major and minor. Pad build and revision if not present.
-            if($VERSION_PARTS.Length -eq 1) { $VERSION_PARTS += "0"; $VERSION_PARTS += "0"; $VERSION_PARTS += "0" } # e.g. 1 -> 1.0.0.0
-            elseif($VERSION_PARTS.Length -eq 2) { $VERSION_PARTS += "0"; $VERSION_PARTS += "0" } # e.g. 1.0 -> 1.0.0.0
-            elseif($VERSION_PARTS.Length -eq 3) { $VERSION_PARTS += "0" } # e.g. 1.0.0 -> 1.0.0.0
-            # If more than 4 parts, truncate to 4 for AssemblyVersion
-            $ASSEMBLY_FILE_VERSION = ($VERSION_PARTS | Select-Object -First 4) -join '.'
+          $class1Path = "${{ github.workspace }}/Class1.cs"
+          $fileContent = Get-Content $class1Path -Raw
+          $match = [regex]::Match($fileContent, 'private const string ModVersion = \\"([^\\"]+)\\"')
+
+          if ($match.Success) {
+            $VERSION_FROM_FILE = $match.Groups[1].Value
+            Write-Host "Extracted version from Class1.cs: $VERSION_FROM_FILE"
           } else {
-            # For non-tag pushes (e.g., to master)
+            Write-Error "Could not extract version from Class1.cs. Using default dev version."
             $SHORT_SHA = "${{ github.sha }}".Substring(0, 7)
-            $INFORMATIONAL_VERSION = "0.0.0-dev-$SHORT_SHA"
-            $ASSEMBLY_FILE_VERSION = "0.0.0.0" # Strict x.x.x.x format for AssemblyVersion/FileVersion
+            $VERSION_FROM_FILE = "0.0.0-dev-$SHORT_SHA" # Fallback
           }
-          Write-Host "Detected InformationalVersion: $INFORMATIONAL_VERSION"
-          Write-Host "Detected AssemblyFileVersion: $ASSEMBLY_FILE_VERSION"
+
+          $INFORMATIONAL_VERSION = $VERSION_FROM_FILE
+          $ASSEMBLY_FILE_VERSION = $VERSION_FROM_FILE
+
+          # Ensure AssemblyVersion/FileVersion has at least major.minor.build.revision, pad with .0 if needed
+          $VERSION_PARTS = $INFORMATIONAL_VERSION.Split('.')
+          # Remove any pre-release suffix for AssemblyVersion/FileVersion (e.g. -beta, -dev-sha)
+          if ($VERSION_PARTS[-1].Contains("-")) {
+            $tempVersion = $VERSION_PARTS[-1].Split('-')[0]
+            $VERSION_PARTS = $VERSION_PARTS[0..($VERSION_PARTS.Length-2)] + $tempVersion
+          }
+          
+          if($VERSION_PARTS.Length -eq 1) { $ASSEMBLY_FILE_VERSION = "$($VERSION_PARTS[0]).0.0.0" }
+          elseif($VERSION_PARTS.Length -eq 2) { $ASSEMBLY_FILE_VERSION = "$($VERSION_PARTS[0]).$($VERSION_PARTS[1]).0.0" }
+          elseif($VERSION_PARTS.Length -eq 3) { $ASSEMBLY_FILE_VERSION = "$($VERSION_PARTS[0]).$($VERSION_PARTS[1]).$($VERSION_PARTS[2]).0" }
+          elseif($VERSION_PARTS.Length -ge 4) { $ASSEMBLY_FILE_VERSION = ($VERSION_PARTS | Select-Object -First 4) -join '.' }
+          else { $ASSEMBLY_FILE_VERSION = "0.0.0.0" } # Fallback if parsing fails unexpectedly
+
+          Write-Host "Using InformationalVersion: $INFORMATIONAL_VERSION"
+          Write-Host "Using AssemblyFileVersion: $ASSEMBLY_FILE_VERSION"
           echo "informational_version=$INFORMATIONAL_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           echo "assembly_file_version=$ASSEMBLY_FILE_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-        shell: powershell
+          # Ensure release_tag starts with 'v' for consistency with common tagging practices
+          if ($INFORMATIONAL_VERSION.StartsWith("v")) {
+            echo "release_tag=$INFORMATIONAL_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          } else {
+            echo "release_tag=v$INFORMATIONAL_VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
 
       - name: Build project
         run: >
@@ -94,7 +111,7 @@ jobs:
 
   create_release:
     name: Create GitHub Release
-    needs: build
+    needs: build # Depends on the build job
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -108,10 +125,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          # For master pushes, create a unique tag like dev-<sha>
-          # For actual git tags (e.g., v1.0.0), use the git tag name.
-          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('dev-{0}', github.sha) }}
-          name: ${{ github.ref_type == 'tag' && format('Release {0}', github.ref_name) || format('Development Build {0}', github.sha) }}
+          tag_name: ${{ needs.build.outputs.release_tag }}
+          name: ${{ format('Release {0}', needs.build.outputs.release_tag) }}
           body: |
             Automated release.
             ${{ github.ref_type == 'branch' && format('Commit: {0}', github.sha) || '' }}
@@ -120,8 +135,7 @@ jobs:
             **Changelog:**
             *(For tagged releases, consider maintaining a CHANGELOG.md file and linking it here, or list changes manually.)*
           draft: false
-          # Mark releases from master as pre-releases
-          # Mark tagged releases as pre-releases if the tag contains a hyphen (e.g., v1.0.0-beta)
-          prerelease: ${{ github.ref_type == 'branch' || contains(github.ref_name, '-') }}
+          # Mark as pre-release if the informational_version (extracted from file) contains a hyphen
+          prerelease: ${{ contains(needs.build.outputs.informational_version, '-') }}
           files: |
             artifacts/FeatherCapeJump.dll

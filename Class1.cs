@@ -22,7 +22,7 @@ namespace FeatherCapeJumpRestore
     {
         private const string ModGuid = "FeatherCapeJump.Official"; 
         private const string ModName = "Feather Cape Jump Restore";
-        private const string ModVersion = "1.1.2"; // Incremented version for config cap change
+        private const string ModVersion = "1.1.3"; // Incremented version for config cap change
 
         // Configuration entry - made nullable
         private static ConfigEntry<float>? _jumpHeightMultiplierConfig;
