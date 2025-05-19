@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\FeatherCapeJump\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2CBCF29D-E07F-A1A5-582D-D78B8E5E8712}|FeatherCapeJump.csproj|c:\\program files (x86)\\steam\\steamapps\\common\\valheim\\bepinex\\plugins\\feathercapejump\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2CBCF29D-E07F-A1A5-582D-D78B8E5E8712}|FeatherCapeJump.csproj|solutionrelative:class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2CBCF29D-E07F-A1A5-582D-D78B8E5E8712}|FeatherCapeJump.csproj|c:\\program files (x86)\\steam\\steamapps\\common\\valheim\\bepinex\\plugins\\feathercapejump\\feathercapejump.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2CBCF29D-E07F-A1A5-582D-D78B8E5E8712}|FeatherCapeJump.csproj|solutionrelative:feathercapejump.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\FeatherCapeJump\\Class1.cs",
+              "RelativeDocumentMoniker": "Class1.cs",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\FeatherCapeJump\\Class1.cs",
+              "RelativeToolTip": "Class1.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwDoAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-18T15:16:57.999Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FeatherCapeJump",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\FeatherCapeJump\\FeatherCapeJump.csproj",
+              "RelativeDocumentMoniker": "FeatherCapeJump.csproj",
+              "ToolTip": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\FeatherCapeJump\\FeatherCapeJump.csproj",
+              "RelativeToolTip": "FeatherCapeJump.csproj",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAiwCEAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-05-18T15:14:51.202Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
