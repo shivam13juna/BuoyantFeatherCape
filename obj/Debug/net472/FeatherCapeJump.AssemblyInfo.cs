@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FeatherCapeJump")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6aeefdfd38358aabdc2bfb7c68d6e8255a1b10a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef4432e3b33b26bc0f574d6c8767ec4f6cb84fe8")]
 [assembly: System.Reflection.AssemblyProductAttribute("FeatherCapeJump")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FeatherCapeJump")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

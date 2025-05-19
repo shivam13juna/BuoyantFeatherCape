@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SVp64+kIfB0=",
+  "dgSpecHash": "r3Q3vXP8Wo8=",
   "success": true,
-  "projectFilePath": "/Users/shivam13juna/Documents/learn/feather_cape/FeatherCapeJump.csproj",
-  "expectedPackageFiles": [
-    "/Users/shivam13juna/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.3/microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
-    "/Users/shivam13juna/.nuget/packages/microsoft.netframework.referenceassemblies.net472/1.0.3/microsoft.netframework.referenceassemblies.net472.1.0.3.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\BuoyantFeatherCape\\FeatherCapeJump.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
