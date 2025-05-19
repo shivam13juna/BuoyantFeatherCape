@@ -53,25 +53,17 @@ jobs:
           dotnet-version: '7.0.x'
 
       - name: Prepare Build Libraries from _GameOriginalLibs
-        shell: powershell
+        shell: bash
         run: |
-          $sourceDir = "${{ github.workspace }}/_GameOriginalLibs"
-          $destinationDir = "${{ github.workspace }}/BuildReferencedLibs"
-          Write-Host "Source for DLLs: $sourceDir"
-          Write-Host "Destination for build DLLs: $destinationDir"
-          if (Test-Path $sourceDir) {
-            New-Item -ItemType Directory -Force -Path $destinationDir
-            Copy-Item -Path "$sourceDir/*" -Destination $destinationDir -Force -Recurse
-            Write-Host "Copied DLLs from $sourceDir to $destinationDir"
-          } else {
-            Write-Error "_GameOriginalLibs folder not found. Please create it in your repository and commit the necessary game/modding DLLs there."
-            exit 1
-          }
-        working-directory: '${{ github.workspace }}'
+          src="${GITHUB_WORKSPACE}/_GameOriginalLibs"
+          dst="${GITHUB_WORKSPACE}/BuildReferencedLibs"
+          echo "Copying DLLs from $src to $dst"
+          mkdir -p "$dst"
+          cp -r "$src"/* "$dst"/
 
       - name: Restore dependencies
         run: dotnet restore FeatherCapeJump.sln
-        working-directory: '${{ github.workspace }}'
+        shell: bash
 
       - name: Build project
         run: |
@@ -79,8 +71,7 @@ jobs:
             /p:Version=${{ needs.extract_version.outputs.informational_version }} \
             /p:AssemblyVersion=${{ needs.extract_version.outputs.assembly_file_version }} \
             /p:FileVersion=${{ needs.extract_version.outputs.assembly_file_version }}
-        working-directory: '${{ github.workspace }}'
-        shell: powershell
+        shell: bash
 
       - name: Upload DLL artifact
         uses: actions/upload-artifact@v4
