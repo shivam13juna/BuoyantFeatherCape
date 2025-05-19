@@ -71,7 +71,6 @@ jobs:
           } else {
             Write-Error "ERROR: Could not extract ModVersion from Class1.cs using regex."
             Write-Error "Regex used: $regexPattern"
-            # Attempt to find and print lines containing ModVersion for diagnostics
             $relevantLines = Get-Content $class1Path -Encoding UTF8 | Where-Object { $_ -match "ModVersion" }
             if ($relevantLines) {
               Write-Error "Relevant line(s) from Class1.cs containing 'ModVersion':"
@@ -79,8 +78,9 @@ jobs:
             } else {
               Write-Error "No lines containing 'ModVersion' found in Class1.cs."
             }
-            $fileSnippet = $fileContent.Substring(0, [System.Math]::Min($fileContent.Length, 500))
-            Write-Error "File content snippet (first 500 chars): $fileSnippet"
+            Write-Error "--- Entire content of Class1.cs (as seen by the script) START ---"
+            Write-Host ($fileContent | Out-String) # Using Write-Host to avoid it being treated as an error
+            Write-Error "--- Entire content of Class1.cs (as seen by the script) END ---"
             exit 1 # Fail the build if version cannot be extracted
           }
 
