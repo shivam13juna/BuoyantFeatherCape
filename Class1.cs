@@ -40,7 +40,7 @@ namespace FeatherCapeJumpRestore
                 "JumpHeightMultiplier",             // Key name
                 DefaultJumpMultiplier,              // Default value
                 new ConfigDescription("The multiplier for jump height when wearing the Feather Cape. E.g., 1.20 means 20% higher jump.", 
-                                    new AcceptableValueRange<float>(1.0f, 20.0f))); // Changed cap from 5.0f to 20.0f
+                                    new AcceptableValueRange<float>(1.0f, 10.0f))); // Changed cap from 5.0f to 20.0f
 
             Harmony.PatchAll();
             Logger.LogInfo($"{ModName} {ModVersion} loaded. Jump multiplier set to: {(_jumpHeightMultiplierConfig != null ? _jumpHeightMultiplierConfig.Value : DefaultJumpMultiplier)}");
