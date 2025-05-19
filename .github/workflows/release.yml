@@ -3,7 +3,7 @@ name: Build and Release FeatherCapeJump
 on:
   push:
     branches:
-      - main 
+      - master 
 
 jobs:
   build:
