@@ -12,23 +12,23 @@
 	<!-- 3 – only the three DLLs you really need -->
 	<ItemGroup>
 		<Reference Include="BepInEx">
-			<HintPath>..\..\core\BepInEx.dll</HintPath>
+			<HintPath>BuildReferencedLibs\\BepInEx.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="0Harmony">
-			<HintPath>..\..\core\0Harmony.dll</HintPath>
+			<HintPath>BuildReferencedLibs\\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="assembly_valheim">
-			<HintPath>..\..\..\valheim_Data\Managed\assembly_valheim.dll</HintPath>
+			<HintPath>BuildReferencedLibs\\assembly_valheim.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="UnityEngine">
-			<HintPath>..\..\..\valheim_Data\Managed\UnityEngine.dll</HintPath>
+			<HintPath>BuildReferencedLibs\\UnityEngine.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="UnityEngine.CoreModule">
-			<HintPath>..\..\..\valheim_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+			<HintPath>BuildReferencedLibs\\UnityEngine.CoreModule.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>

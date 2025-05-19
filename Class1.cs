@@ -7,6 +7,7 @@
 // Target framework: net472
 
 using BepInEx;
+using BepInEx.Configuration; // Added for config file handling
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -19,19 +20,30 @@ namespace FeatherCapeJumpRestore
     [BepInPlugin(ModGuid, ModName, ModVersion)]
     public class FeatherCapeJump : BaseUnityPlugin
     {
-        private const string ModGuid = "shivam.valheim.feathercapejump";
+        private const string ModGuid = "FeatherCapeJump.Official"; 
         private const string ModName = "Feather Cape Jump Restore";
-        private const string ModVersion = "1.1.0";
+        private const string ModVersion = "1.1.2"; // Incremented version for config cap change
 
-        // 20 % higher jump → multiply by 1.2 one time per jump
-        private const float JumpMultiplier = 1.20f;
+        // Configuration entry - made nullable
+        private static ConfigEntry<float>? _jumpHeightMultiplierConfig;
+
+        // Default jump multiplier if config is invalid or not found initially
+        private const float DefaultJumpMultiplier = 1.20f; 
 
         private static readonly Harmony Harmony = new Harmony(ModGuid);
 
         private void Awake()
         {
+            // Initialize configuration
+            _jumpHeightMultiplierConfig = Config.Bind<float>(
+                "General",                          // Section name
+                "JumpHeightMultiplier",             // Key name
+                DefaultJumpMultiplier,              // Default value
+                new ConfigDescription("The multiplier for jump height when wearing the Feather Cape. E.g., 1.20 means 20% higher jump.", 
+                                    new AcceptableValueRange<float>(1.0f, 20.0f))); // Changed cap from 5.0f to 20.0f
+
             Harmony.PatchAll();
-            Logger.LogInfo($"{ModName} {ModVersion} loaded");
+            Logger.LogInfo($"{ModName} {ModVersion} loaded. Jump multiplier set to: {(_jumpHeightMultiplierConfig != null ? _jumpHeightMultiplierConfig.Value : DefaultJumpMultiplier)}");
         }
 
         private void OnDestroy() => Harmony.UnpatchSelf();
@@ -43,31 +55,29 @@ namespace FeatherCapeJumpRestore
         {
             if (player == null) return false;
 
-            // Build list of equipped items
-            List<ItemDrop.ItemData> worn = ListPool<ItemDrop.ItemData>.Get(); // Changed from Create() to Get()
+            List<ItemDrop.ItemData> worn = ListPool<ItemDrop.ItemData>.Get(); // Ensured correct type
             player.GetInventory().GetWornItems(worn);
 
             bool result = worn.Any(i => i != null && i.m_shared != null && i.m_shared.m_name == "$item_cape_feather");
 
-            ListPool<ItemDrop.ItemData>.Release(worn);
+            ListPool<ItemDrop.ItemData>.Release(worn); // Ensured correct type
             return result;
         }
 
         // ---------------------------------------------------------------------------
         //  Harmony patch: Character.Jump (vanilla method sets body velocity.y = m_jumpForce)
         // ---------------------------------------------------------------------------
-        [HarmonyPatch(typeof(Character), nameof(Character.Jump))] // Changed Player to Character
-        private static class Player_Jump_Patch // You can keep this class name, or rename it to Character_Jump_Patch for clarity
+        [HarmonyPatch(typeof(Character), nameof(Character.Jump))] 
+        private static class Player_Jump_Patch 
         {
             // Store original value so we can restore and avoid cumulative stacking
-            private static void Prefix(Character __instance, ref float ___m_jumpForce, out float __state) // Changed Player to Character for __instance
+            private static void Prefix(Character __instance, ref float ___m_jumpForce, out float __state) 
             {
-                __state = ___m_jumpForce; // keep pristine copy
-                // We need to check if the Character instance is actually the player
-                // and then if that player is wearing the feather cape.
+                __state = ___m_jumpForce; 
                 if (__instance is Player playerInstance && WearingFeatherCape(playerInstance))
                 {
-                    ___m_jumpForce *= JumpMultiplier;
+                    // Use the configured value, with a fallback to default if somehow null
+                    ___m_jumpForce *= (_jumpHeightMultiplierConfig != null ? _jumpHeightMultiplierConfig.Value : DefaultJumpMultiplier);
                 }
             }
 

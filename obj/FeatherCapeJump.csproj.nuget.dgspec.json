@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\BuoyantFeatherCape\\FeatherCapeJump.csproj": {}
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\my_mods\\BuoyantFeatherCape\\FeatherCapeJump.csproj": {}
   },
   "projects": {
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\BuoyantFeatherCape\\FeatherCapeJump.csproj": {
+    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\my_mods\\BuoyantFeatherCape\\FeatherCapeJump.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\BuoyantFeatherCape\\FeatherCapeJump.csproj",
+        "projectUniqueName": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\my_mods\\BuoyantFeatherCape\\FeatherCapeJump.csproj",
         "projectName": "FeatherCapeJump",
-        "projectPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\BuoyantFeatherCape\\FeatherCapeJump.csproj",
+        "projectPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\my_mods\\BuoyantFeatherCape\\FeatherCapeJump.csproj",
         "packagesPath": "C:\\Users\\Shivam\\.nuget\\packages\\",
-        "outputPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\BuoyantFeatherCape\\obj\\",
+        "outputPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\my_mods\\BuoyantFeatherCape\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
