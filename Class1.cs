@@ -21,29 +21,39 @@ namespace FeatherCapeJumpRestore
     public class FeatherCapeJump : BaseUnityPlugin
     {
         private const string ModGuid = "FeatherCapeJump.Official"; 
-        private const string ModName = "Feather Cape Jump Restore";
-        private const string ModVersion = "1.1.3"; // Incremented version for config cap change
+        private const string ModName = "Feather Cape Jump & Speed"; // Updated ModName
+        private const string ModVersion = "1.2.0"; // Incremented version for new feature
 
-        // Configuration entry - made nullable
+        // Configuration entries - made nullable
         private static ConfigEntry<float>? _jumpHeightMultiplierConfig;
+        private static ConfigEntry<float>? _runSpeedMultiplierConfig; // New config for run speed
 
-        // Default jump multiplier if config is invalid or not found initially
+        // Default multipliers if config is invalid or not found initially
         private const float DefaultJumpMultiplier = 1.20f; 
+        private const float DefaultRunSpeedMultiplier = 1.0f; // Default run speed multiplier (no change)
 
         private static readonly Harmony Harmony = new Harmony(ModGuid);
 
         private void Awake()
         {
-            // Initialize configuration
+            // Initialize configuration for Jump Height
             _jumpHeightMultiplierConfig = Config.Bind<float>(
                 "General",                          // Section name
                 "JumpHeightMultiplier",             // Key name
                 DefaultJumpMultiplier,              // Default value
                 new ConfigDescription("The multiplier for jump height when wearing the Feather Cape. E.g., 1.20 means 20% higher jump.", 
-                                    new AcceptableValueRange<float>(1.0f, 10.0f))); // Changed cap from 5.0f to 20.0f
+                                    new AcceptableValueRange<float>(1.0f, 10.0f)));
+
+            // Initialize configuration for Run Speed
+            _runSpeedMultiplierConfig = Config.Bind<float>(
+                "General",                          // Section name
+                "RunSpeedMultiplier",               // Key name
+                DefaultRunSpeedMultiplier,          // Default value
+                new ConfigDescription("The multiplier for run speed when wearing the Feather Cape. E.g., 1.2 means 20% faster run speed. Default is 1.0 (no change).",
+                                    new AcceptableValueRange<float>(1.0f, 3.0f))); // Range from 1.0x to 3.0x
 
             Harmony.PatchAll();
-            Logger.LogInfo($"{ModName} {ModVersion} loaded. Jump multiplier set to: {(_jumpHeightMultiplierConfig != null ? _jumpHeightMultiplierConfig.Value : DefaultJumpMultiplier)}");
+            Logger.LogInfo($"{ModName} {ModVersion} loaded. Jump multiplier: {(_jumpHeightMultiplierConfig != null ? _jumpHeightMultiplierConfig.Value : DefaultJumpMultiplier)}, Run Speed multiplier: {(_runSpeedMultiplierConfig != null ? _runSpeedMultiplierConfig.Value : DefaultRunSpeedMultiplier)}");
         }
 
         private void OnDestroy() => Harmony.UnpatchSelf();
@@ -85,6 +95,23 @@ namespace FeatherCapeJumpRestore
             private static void Postfix(ref float ___m_jumpForce, float __state)
             {
                 ___m_jumpForce = __state;
+            }
+        }
+
+        // ---------------------------------------------------------------------------
+        //  Harmony patch: Player.GetRunSpeedFactor
+        // ---------------------------------------------------------------------------
+        [HarmonyPatch(typeof(Player), "GetRunSpeedFactor")] // Changed nameof to string literal
+        private static class Player_GetRunSpeedFactor_Patch
+        {
+            private static void Postfix(Player __instance, ref float __result)
+            {
+                if (WearingFeatherCape(__instance))
+                {
+                    // Apply the configured run speed multiplier
+                    // Use a fallback to default if config is somehow null
+                    __result *= (_runSpeedMultiplierConfig != null ? _runSpeedMultiplierConfig.Value : DefaultRunSpeedMultiplier);
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = FeatherCapeJump
-build_property.ProjectDir = C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\plugins\BuoyantFeatherCape\
+build_property.ProjectDir = /Users/shivam13juna/Documents/learn/feather_cape/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false
