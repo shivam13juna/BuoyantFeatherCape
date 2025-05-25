@@ -420,9 +420,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/shivam13juna/Documents/learn/feather_cape/FeatherCapeJump.csproj",
-      "projectName": "FeatherCapeJump",
-      "projectPath": "/Users/shivam13juna/Documents/learn/feather_cape/FeatherCapeJump.csproj",
+      "projectUniqueName": "/Users/shivam13juna/Documents/learn/feather_cape/BuoyantFeatherCape.csproj",
+      "projectName": "BuoyantFeatherCape",
+      "projectPath": "/Users/shivam13juna/Documents/learn/feather_cape/BuoyantFeatherCape.csproj",
       "packagesPath": "/Users/shivam13juna/.nuget/packages/",
       "outputPath": "/Users/shivam13juna/Documents/learn/feather_cape/obj/",
       "projectStyle": "PackageReference",

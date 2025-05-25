@@ -1,0 +1,10 @@
+/Users/shivam13juna/Documents/learn/feather_cape/bin/Debug/net472/BuoyantFeatherCape.dll
+/Users/shivam13juna/Documents/learn/feather_cape/bin/Debug/net472/BuoyantFeatherCape.pdb
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.csproj.AssemblyReference.cache
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.GeneratedMSBuildEditorConfig.editorconfig
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.AssemblyInfoInputs.cache
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.AssemblyInfo.cs
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.csproj.CoreCompileInputs.cache
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.sourcelink.json
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.dll
+/Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.pdb

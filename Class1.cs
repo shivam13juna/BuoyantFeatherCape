@@ -1,4 +1,4 @@
-﻿// FeatherCapeJump.cs – BepInEx plugin to restore the +20 % jump bonus when wearing a Feather Cape in Valheim (Hildir + Ashlands builds)
+﻿// BuoyantFeatherCape.cs – BepInEx plugin to restore the +20 % jump bonus when wearing a Feather Cape in Valheim (Hildir + Ashlands builds)
 // ------------------------------------------------------------------------------------
 // Build against:
 //   • BepInEx 5.4.x                  (core/BepInEx.dll)
@@ -18,9 +18,9 @@ using UnityEngine.Pool; // Ensure this using directive is present
 namespace FeatherCapeJumpRestore
 {
     [BepInPlugin(ModGuid, ModName, ModVersion)]
-    public class FeatherCapeJump : BaseUnityPlugin
+    public class BuoyantFeatherCape : BaseUnityPlugin
     {
-        private const string ModGuid = "FeatherCapeJump.Official"; 
+        private const string ModGuid = "BuoyantFeatherCape.Official"; 
         private const string ModName = "Feather Cape Jump & Speed"; // Updated ModName
         private const string ModVersion = "1.2.0"; // Incremented version for new feature
 

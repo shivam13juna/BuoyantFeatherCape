@@ -1,9 +1,9 @@
 {
-	"package_name": "feather-cape-jump",
-	"package_version": "1.0.0",
-	"display_name": "Feather Cape Jump",
-	"author": "YourName",
-	"description": "Adds a feather cape jumping ability to Valheim.",
+	"package_name": "BuoyantFeatherCape",
+	"package_version": "1.2.0",
+	"display_name": "Feather Cape Jump & Speed",
+	"author": "Shivam Prasad",
+	"description": "Restores the jump bonus and adds a configurable run speed bonus when wearing the Feather Cape.",
 	"dependencies": [
 		"BepInExPack_Valheim >= 5.4.1"
 	]
