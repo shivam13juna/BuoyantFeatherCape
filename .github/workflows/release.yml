@@ -1,4 +1,4 @@
-name: Build and Release FeatherCapeJump
+name: Build and Release BuoyantFeatherCape
 
 on:
   push:
@@ -62,12 +62,12 @@ jobs:
           cp -r "$src"/* "$dst"/
 
       - name: Restore dependencies
-        run: dotnet restore FeatherCapeJump.sln
+        run: dotnet restore BuoyantFeatherCape.sln
         shell: bash
 
       - name: Build project
         run: |
-          dotnet build FeatherCapeJump.sln --configuration Release --no-restore \
+          dotnet build BuoyantFeatherCape.sln --configuration Release --no-restore \
             -p:Version=${{ needs.extract_version.outputs.informational_version }} \
             -p:AssemblyVersion=${{ needs.extract_version.outputs.assembly_file_version }} \
             -p:FileVersion=${{ needs.extract_version.outputs.assembly_file_version }}
@@ -76,9 +76,9 @@ jobs:
       - name: Upload DLL artifact
         uses: actions/upload-artifact@v4
         with:
-          name: FeatherCapeJump-dll
+          name: BuoyantFeatherCape-dll
           # Path to the DLL. Based on your structure, it's under net472 for Release.
-          path: '${{ github.workspace }}/bin/Release/net472/FeatherCapeJump.dll'
+          path: '${{ github.workspace }}/bin/Release/net472/BuoyantFeatherCape.dll'
 
   create_release:
     name: Create GitHub Release
@@ -90,7 +90,7 @@ jobs:
       - name: Download DLL artifact
         uses: actions/download-artifact@v4
         with:
-          name: FeatherCapeJump-dll
+          name: BuoyantFeatherCape-dll
           path: artifacts
 
       - name: Create GitHub Release
@@ -104,4 +104,4 @@ jobs:
           # Mark as pre-release if the informational_version (extracted from file) contains a hyphen
           prerelease: ${{ contains(needs.extract_version.outputs.informational_version, '-') }}
           files: |
-            artifacts/FeatherCapeJump.dll
+            artifacts/BuoyantFeatherCape.dll
