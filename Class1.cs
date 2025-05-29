@@ -65,13 +65,15 @@ namespace FeatherCapeJumpRestore
         {
             if (player == null) return false;
 
-            List<ItemDrop.ItemData> worn = ListPool<ItemDrop.ItemData>.Get(); // Ensured correct type
-            player.GetInventory().GetWornItems(worn);
+            // List<ItemDrop.ItemData> worn = ListPool<ItemDrop.ItemData>.Get(); // Ensured correct type
+            // player.GetInventory().GetWornItems(worn);
 
-            bool result = worn.Any(i => i != null && i.m_shared != null && i.m_shared.m_name == "$item_cape_feather");
+            // bool result = worn.Any(i => i != null && i.m_shared != null && i.m_shared.m_name == "$item_cape_feather");
 
-            ListPool<ItemDrop.ItemData>.Release(worn); // Ensured correct type
-            return result;
+            // ListPool<ItemDrop.ItemData>.Release(worn); // Ensured correct type
+            // return result;
+
+            return player.IsItemEquiped("$item_cape_feather");
         }
 
         // ---------------------------------------------------------------------------
