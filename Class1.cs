@@ -22,7 +22,7 @@ namespace FeatherCapeJumpRestore
     {
         private const string ModGuid = "BuoyantFeatherCape.Official"; 
         private const string ModName = "Feather Cape Jump & Speed"; // Updated ModName
-        private const string ModVersion = "1.2.0"; // Incremented version for new feature
+        private const string ModVersion = "1.2.1"; // Incremented version for new feature
 
         // Configuration entries - made nullable
         private static ConfigEntry<float>? _jumpHeightMultiplierConfig;
@@ -73,7 +73,11 @@ namespace FeatherCapeJumpRestore
             // ListPool<ItemDrop.ItemData>.Release(worn); // Ensured correct type
             // return result;
 
-            return player.IsItemEquiped("$item_cape_feather");
+            return player.GetInventory()
+                 .GetAllItems()
+                 .Any(i => i.m_equipped &&
+                           i.m_shared != null &&
+                           i.m_shared.m_name == "$item_cape_feather");
         }
 
         // ---------------------------------------------------------------------------
