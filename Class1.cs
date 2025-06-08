@@ -19,9 +19,8 @@ namespace FeatherCapeJumpRestore
 {
     [BepInPlugin(ModGuid, ModName, ModVersion)]
     public class BuoyantFeatherCape : BaseUnityPlugin
-    {        private const string ModGuid = "BuoyantFeatherCape.Official";
-        private const string ModName = "Feather Cape Jump & Speed & Eitr"; // Updated ModName
-        private const string ModVersion = "1.3.0"; // Incremented version for new feature
+    {        private const string ModGuid = "BuoyantFeatherCape.Official";        private const string ModName = "Feather Cape Jump & Speed & Eitr"; // All features enabled
+        private const string ModVersion = "1.3.4"; // Fixed corrupted eitr values
 
         // Configuration entries - made nullable
         private static ConfigEntry<float>? _jumpHeightMultiplierConfig;
@@ -125,29 +124,43 @@ namespace FeatherCapeJumpRestore
                     __result *= (_runSpeedMultiplierConfig != null ? _runSpeedMultiplierConfig.Value : DefaultRunSpeedMultiplier);
                 }
             }
-        }
-
-        // ---------------------------------------------------------------------------
+        }        // ---------------------------------------------------------------------------
         //  Harmony patch: Player.UpdateStats (for Eitr regeneration enhancement)
+        //  Based on successful implementation from EitrMagicExtended mod
         // ---------------------------------------------------------------------------
-        [HarmonyPatch(typeof(Player), "UpdateStats")]
+        [HarmonyPatch(typeof(Player), "UpdateStats", typeof(float))]
         private static class Player_UpdateStats_Patch
         {
-            // Store original value so we can restore and avoid cumulative stacking
-            private static void Prefix(Player __instance, ref float ___m_eiterRegen, out float __state)
+            // Base regeneration value - we'll reset to this first, then apply our multiplier
+            private const float BaseEitrRegen = 2f; // Default eitr regen rate from vanilla            [HarmonyPriority(Priority.Low)]
+            private static void Prefix(Player __instance)
             {
-                __state = ___m_eiterRegen;
+                // Always reset to base value first to prevent accumulation
+                __instance.m_eiterRegen = BaseEitrRegen;
+                
+                // Fix corrupted eitr values using available methods
+                float currentEitr = __instance.GetEitr();
+                float maxEitr = __instance.GetMaxEitr();
+                
+                // Check for corrupted current eitr value
+                if (currentEitr < 0f || currentEitr > 10000f || float.IsNaN(currentEitr) || float.IsInfinity(currentEitr))
+                {
+                    // Try to drain all eitr to reset it
+                    __instance.UseEitr(currentEitr + 1000f); // Drain more than current to force to 0
+                }
+                
+                // Check for corrupted max eitr - if so, just reset regen
+                if (maxEitr < 0f || maxEitr > 10000f || float.IsNaN(maxEitr) || float.IsInfinity(maxEitr))
+                {
+                    // Force reset of regen to try to stabilize
+                    __instance.m_eiterRegen = BaseEitrRegen;
+                }
+                
                 if (WearingFeatherCape(__instance))
                 {
-                    // Use the configured value, with a fallback to default if somehow null
-                    ___m_eiterRegen *= (_eitrRegenMultiplierConfig != null ? _eitrRegenMultiplierConfig.Value : DefaultEitrRegenMultiplier);
+                    // Apply the configured eitr regen multiplier to the base regeneration rate
+                    __instance.m_eiterRegen *= (_eitrRegenMultiplierConfig != null ? _eitrRegenMultiplierConfig.Value : DefaultEitrRegenMultiplier);
                 }
-            }
-
-            // Restore after original method executes
-            private static void Postfix(ref float ___m_eiterRegen, float __state)
-            {
-                ___m_eiterRegen = __state;
             }
         }
     }

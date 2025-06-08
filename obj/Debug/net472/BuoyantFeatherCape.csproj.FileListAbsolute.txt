@@ -8,3 +8,13 @@
 /Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.sourcelink.json
 /Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.dll
 /Users/shivam13juna/Documents/learn/feather_cape/obj/Debug/net472/BuoyantFeatherCape.pdb
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\bin\Debug\net472\BuoyantFeatherCape.dll
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\bin\Debug\net472\BuoyantFeatherCape.pdb
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.csproj.AssemblyReference.cache
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.GeneratedMSBuildEditorConfig.editorconfig
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.AssemblyInfoInputs.cache
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.AssemblyInfo.cs
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.csproj.CoreCompileInputs.cache
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.sourcelink.json
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.dll
+C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\my_mods\BuoyantFeatherCape\obj\Debug\net472\BuoyantFeatherCape.pdb

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BuoyantFeatherCape")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+122a3d369752e57200eced1b94cc9436f03f281e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ce5bffb71a4465e77c77f236ef1aea4529fc523")]
 [assembly: System.Reflection.AssemblyProductAttribute("BuoyantFeatherCape")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BuoyantFeatherCape")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
