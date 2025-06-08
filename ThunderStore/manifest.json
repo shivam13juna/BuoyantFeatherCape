@@ -1,14 +1,8 @@
 {
-  "name": "feather-cape-jump",
-  "version_number": "1.1.3",
-  "title": "Feather Cape Jump",
-  "author": "Shivam Prasad",
-  "description": "Compensates 20% a feather cape jumping ability to Valheim.",
-  "website_url": "https://github.com/shivam13juna/FeatherCapeJump",
-  "dependencies": [
-    {
-      "name": "BepInExPack_Valheim",
-      "version_requirement": ">= 5.4.1"
-    }
-  ]
+	"name": "BuoyantFeatherCape",
+	"version_number": "1.3.0",
+	"description": "Restores the jump bonus, adds configurable run speed bonus, and Eitr regeneration bonus when wearing the Feather Cape.",
+	"dependencies": [
+		"BepInExPack_Valheim >= 5.4.1"
+	]
 }

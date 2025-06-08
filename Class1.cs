@@ -20,17 +20,16 @@ namespace FeatherCapeJumpRestore
     [BepInPlugin(ModGuid, ModName, ModVersion)]
     public class BuoyantFeatherCape : BaseUnityPlugin
     {
-        private const string ModGuid = "BuoyantFeatherCape.Official"; 
-        private const string ModName = "Feather Cape Jump & Speed"; // Updated ModName
-        private const string ModVersion = "1.2.1"; // Incremented version for new feature
-
-        // Configuration entries - made nullable
+        private const string ModGuid = "BuoyantFeatherCape.Official";        private const string ModName = "Feather Cape Jump & Speed & Eitr"; // Updated ModName
+        private const string ModVersion = "1.3.0"; // Incremented version for new feature// Configuration entries - made nullable
         private static ConfigEntry<float>? _jumpHeightMultiplierConfig;
         private static ConfigEntry<float>? _runSpeedMultiplierConfig; // New config for run speed
+        private static ConfigEntry<float>? _eitrRegenMultiplierConfig; // New config for eitr regen
 
         // Default multipliers if config is invalid or not found initially
         private const float DefaultJumpMultiplier = 1.20f; 
         private const float DefaultRunSpeedMultiplier = 1.0f; // Default run speed multiplier (no change)
+        private const float DefaultEitrRegenMultiplier = 1.0f; // Default eitr regen multiplier (no change)
 
         private static readonly Harmony Harmony = new Harmony(ModGuid);
 
@@ -42,9 +41,7 @@ namespace FeatherCapeJumpRestore
                 "JumpHeightMultiplier",             // Key name
                 DefaultJumpMultiplier,              // Default value
                 new ConfigDescription("The multiplier for jump height when wearing the Feather Cape. E.g., 1.20 means 20% higher jump.", 
-                                    new AcceptableValueRange<float>(1.0f, 10.0f)));
-
-            // Initialize configuration for Run Speed
+                                    new AcceptableValueRange<float>(1.0f, 10.0f)));            // Initialize configuration for Run Speed
             _runSpeedMultiplierConfig = Config.Bind<float>(
                 "General",                          // Section name
                 "RunSpeedMultiplier",               // Key name
@@ -52,8 +49,16 @@ namespace FeatherCapeJumpRestore
                 new ConfigDescription("The multiplier for run speed when wearing the Feather Cape. E.g., 1.2 means 20% faster run speed. Default is 1.0 (no change).",
                                     new AcceptableValueRange<float>(1.0f, 3.0f))); // Range from 1.0x to 3.0x
 
+            // Initialize configuration for Eitr Regen
+            _eitrRegenMultiplierConfig = Config.Bind<float>(
+                "General",                          // Section name
+                "EitrRegenMultiplier",              // Key name
+                DefaultEitrRegenMultiplier,         // Default value
+                new ConfigDescription("The multiplier for Eitr regeneration when wearing the Feather Cape. E.g., 2.0 means 2x faster Eitr regen. Default is 1.0 (no change).",
+                                    new AcceptableValueRange<float>(1.0f, 5.0f))); // Range from 1.0x to 5.0x
+
             Harmony.PatchAll();
-            Logger.LogInfo($"{ModName} {ModVersion} loaded. Jump multiplier: {(_jumpHeightMultiplierConfig != null ? _jumpHeightMultiplierConfig.Value : DefaultJumpMultiplier)}, Run Speed multiplier: {(_runSpeedMultiplierConfig != null ? _runSpeedMultiplierConfig.Value : DefaultRunSpeedMultiplier)}");
+            Logger.LogInfo($"{ModName} {ModVersion} loaded. Jump multiplier: {(_jumpHeightMultiplierConfig != null ? _jumpHeightMultiplierConfig.Value : DefaultJumpMultiplier)}, Run Speed multiplier: {(_runSpeedMultiplierConfig != null ? _runSpeedMultiplierConfig.Value : DefaultRunSpeedMultiplier)}, Eitr Regen multiplier: {(_eitrRegenMultiplierConfig != null ? _eitrRegenMultiplierConfig.Value : DefaultEitrRegenMultiplier)}");
         }
 
         private void OnDestroy() => Harmony.UnpatchSelf();
@@ -118,6 +123,30 @@ namespace FeatherCapeJumpRestore
                     // Use a fallback to default if config is somehow null
                     __result *= (_runSpeedMultiplierConfig != null ? _runSpeedMultiplierConfig.Value : DefaultRunSpeedMultiplier);
                 }
+            }
+        }
+
+        // ---------------------------------------------------------------------------
+        //  Harmony patch: Player.UpdateStats (for Eitr regeneration enhancement)
+        // ---------------------------------------------------------------------------
+        [HarmonyPatch(typeof(Player), "UpdateStats")]
+        private static class Player_UpdateStats_Patch
+        {
+            // Store original value so we can restore and avoid cumulative stacking
+            private static void Prefix(Player __instance, ref float ___m_eiterRegen, out float __state)
+            {
+                __state = ___m_eiterRegen;
+                if (WearingFeatherCape(__instance))
+                {
+                    // Use the configured value, with a fallback to default if somehow null
+                    ___m_eiterRegen *= (_eitrRegenMultiplierConfig != null ? _eitrRegenMultiplierConfig.Value : DefaultEitrRegenMultiplier);
+                }
+            }
+
+            // Restore after original method executes
+            private static void Postfix(ref float ___m_eiterRegen, float __state)
+            {
+                ___m_eiterRegen = __state;
             }
         }
     }

@@ -4,7 +4,7 @@
 
 **Tired of mundane jumps? Wish your Feather Cape offered more than just a slow fall? Prepare to elevate your Valheim experience with BuoyantFeatherCape!**
 
-This mod enhances the vanilla Feather Cape, transforming it into a tool of true aerial and ground agility. Leap higher and run faster to explore the world like never before!
+This mod enhances the vanilla Feather Cape, transforming it into a tool of true aerial agility and optionally ground speed and magical regeneration. Leap higher by default, and optionally run faster or regenerate Eitr faster to explore the world like never before!
 
 # Link to nexusmod
 [![Link to Nexus Mod](https://img.shields.io/badge/Nexus%20Mods-BuoyantFeatherCape-blue.svg)](https://www.nexusmods.com/valheim/mods/3062)
@@ -15,11 +15,13 @@ This mod enhances the vanilla Feather Cape, transforming it into a tool of true 
 
 BuoyantFeatherCape enhances the player's abilities when a Feather Cape is equipped. Experience:
 
-*   **Enhanced Jump Height:** Reach new heights and overcome obstacles with ease. The jump height multiplier is configurable.
-*   **Increased Run Speed:** Sprint faster across the lands (By default, the speed increment is 1.0 but it can be configured in the configuration manager).
-*   **Configurable Settings:** Tailor the jump height and run speed multipliers to your liking via a configuration file (`BepInEx/config/BuoyantFeatherCape.Official.cfg`). 
-    *   Jump multiplier can be set between `1.0` (no bonus) and `10.0` (10x jump height).
-    *   Run speed multiplier can be set between `1.0` (no bonus) and `3.0` (3x run speed).
+*   **Enhanced Jump Height:** Reach new heights and overcome obstacles with ease. The jump height multiplier is configurable and enabled by default (20% higher).
+*   **Optional Increased Run Speed:** Sprint faster across the lands if desired. By default, this feature is disabled (multiplier set to 1.0) but can be configured up to 3x speed.
+*   **Optional Enhanced Eitr Regeneration:** Regenerate your magical energy faster when enabled. By default, this feature is disabled (multiplier set to 1.0) but can be configured up to 5x regeneration rate.
+*   **Configurable Settings:** Tailor all multipliers to your liking via a configuration file (`BepInEx/config/BuoyantFeatherCape.Official.cfg`). 
+    *   Jump multiplier can be set between `1.0` (no bonus) and `10.0` (10x jump height). **Default: 1.20 (20% bonus)**
+    *   Run speed multiplier can be set between `1.0` (no bonus) and `3.0` (3x run speed). **Default: 1.0 (no bonus)**
+    *   Eitr regeneration multiplier can be set between `1.0` (no bonus) and `5.0` (5x regen rate). **Default: 1.0 (no bonus)**
 
 ---
 
@@ -27,9 +29,10 @@ BuoyantFeatherCape enhances the player's abilities when a Feather Cape is equipp
 
 *   **Seamless Integration:** Works flawlessly with the existing Feather Cape.
 *   **Lightweight:** Designed to be performance-friendly.
-*   **Easy to Use:** Simply equip your Feather Cape and start jumping and running with enhanced capabilities!
-*   **Configurable Jump Height:** Adjust the `JumpHeightMultiplier` in the config file (default is `1.20`, i.e., 20% higher).
-*   **Configurable Run Speed:** Adjust the `RunSpeedMultiplier` in the config file (default is `1.0`, i.e., no change to normal run speed).
+*   **Easy to Use:** Simply equip your Feather Cape and start jumping with enhanced capabilities! Optionally configure speed and Eitr bonuses.
+*   **Enhanced Jump Height:** Enabled by default with 20% higher jumps. Adjust the `JumpHeightMultiplier` in the config file.
+*   **Optional Run Speed Boost:** Disabled by default. Set `RunSpeedMultiplier` above 1.0 to enable faster running.
+*   **Optional Eitr Regeneration Boost:** Disabled by default. Set `EitrRegenMultiplier` above 1.0 to enable faster magical energy regeneration.
 
 ---
 
@@ -46,7 +49,11 @@ BuoyantFeatherCape enhances the player's abilities when a Feather Cape is equipp
 
 1.  Craft or find a Feather Cape in Valheim.
 2.  Equip the Feather Cape.
-3.  Jump and Run! Enjoy your newfound aerial and terrestrial prowess.
+3.  Jump! Enjoy your enhanced aerial prowess (20% higher jumps by default).
+4.  **Optional:** Configure the mod by editing `BepInEx/config/BuoyantFeatherCape.Official.cfg` to:
+    *   Adjust jump height multiplier (default: 1.20)
+    *   Enable and adjust run speed multiplier (default: 1.0 - disabled)
+    *   Enable and adjust Eitr regeneration multiplier (default: 1.0 - disabled)
 
 ---
 
