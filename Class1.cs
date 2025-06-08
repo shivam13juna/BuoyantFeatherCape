@@ -19,9 +19,11 @@ namespace FeatherCapeJumpRestore
 {
     [BepInPlugin(ModGuid, ModName, ModVersion)]
     public class BuoyantFeatherCape : BaseUnityPlugin
-    {
-        private const string ModGuid = "BuoyantFeatherCape.Official";        private const string ModName = "Feather Cape Jump & Speed & Eitr"; // Updated ModName
-        private const string ModVersion = "1.3.0"; // Incremented version for new feature// Configuration entries - made nullable
+    {        private const string ModGuid = "BuoyantFeatherCape.Official";
+        private const string ModName = "Feather Cape Jump & Speed & Eitr"; // Updated ModName
+        private const string ModVersion = "1.3.0"; // Incremented version for new feature
+
+        // Configuration entries - made nullable
         private static ConfigEntry<float>? _jumpHeightMultiplierConfig;
         private static ConfigEntry<float>? _runSpeedMultiplierConfig; // New config for run speed
         private static ConfigEntry<float>? _eitrRegenMultiplierConfig; // New config for eitr regen
@@ -34,24 +36,23 @@ namespace FeatherCapeJumpRestore
         private static readonly Harmony Harmony = new Harmony(ModGuid);
 
         private void Awake()
-        {
-            // Initialize configuration for Jump Height
+        {            // Initialize configuration for Jump Height
             _jumpHeightMultiplierConfig = Config.Bind<float>(
-                "General",                          // Section name
+                "Jump Settings",                    // Section name
                 "JumpHeightMultiplier",             // Key name
                 DefaultJumpMultiplier,              // Default value
                 new ConfigDescription("The multiplier for jump height when wearing the Feather Cape. E.g., 1.20 means 20% higher jump.", 
-                                    new AcceptableValueRange<float>(1.0f, 10.0f)));            // Initialize configuration for Run Speed
+                                    new AcceptableValueRange<float>(1.0f, 10.0f)));
+
+            // Initialize configuration for Run Speed
             _runSpeedMultiplierConfig = Config.Bind<float>(
-                "General",                          // Section name
+                "Speed Settings",                   // Section name
                 "RunSpeedMultiplier",               // Key name
                 DefaultRunSpeedMultiplier,          // Default value
                 new ConfigDescription("The multiplier for run speed when wearing the Feather Cape. E.g., 1.2 means 20% faster run speed. Default is 1.0 (no change).",
-                                    new AcceptableValueRange<float>(1.0f, 3.0f))); // Range from 1.0x to 3.0x
-
-            // Initialize configuration for Eitr Regen
+                                    new AcceptableValueRange<float>(1.0f, 3.0f))); // Range from 1.0x to 3.0x// Initialize configuration for Eitr Regen
             _eitrRegenMultiplierConfig = Config.Bind<float>(
-                "General",                          // Section name
+                "Eitr Settings",                    // Section name - separate section for visibility
                 "EitrRegenMultiplier",              // Key name
                 DefaultEitrRegenMultiplier,         // Default value
                 new ConfigDescription("The multiplier for Eitr regeneration when wearing the Feather Cape. E.g., 2.0 means 2x faster Eitr regen. Default is 1.0 (no change).",
